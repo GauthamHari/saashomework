@@ -34,10 +34,11 @@ public class ConnectionProvider {
 		try {
 			Connection connection = getConnection();
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("INSERT INTO GOODS(THING) VALUES('My cool Item');");
-			ResultSet rs = stmt.executeQuery("SELECT Thing FROM Goods");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Songs");
 			while (rs.next()) {
-				System.out.println("Thing: " + rs.getString("thing"));
+				System.out.println("ID: " + rs.getString("id"));
+				System.out.println("TITLE: " + rs.getString("title"));
+				System.out.println("ARTIST: " + rs.getString("artist") + "\n");
 			}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();

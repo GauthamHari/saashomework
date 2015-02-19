@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -20,6 +21,7 @@ import command.CreateSongCommand;
 import command.GetSongCommand;
 import command.ListSongsCommand;
 import command.UpdateSongCommand;
+import command.DeleteSongCommand;
 import util.Constants;
 
 @Path("song")
@@ -45,22 +47,7 @@ public class Services {
 		}
 		return Response.status(200).entity(songString).build();
 	}
-
-	// get song by Id
-	@GET
-	@Path("{id}")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getSong(@PathParam("id") int id) {
-		GetSongCommand command = new GetSongCommand();
-		String songString = null;
-		try {
-			songString = mapper.writeValueAsString(command.execute(id));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Response.status(200).entity(songString).build();
-	}
-
+	
 	// Add a song
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -83,9 +70,10 @@ public class Services {
 		}
 		return Response.status(200).entity(i).build();
 	}
+	
 	// Update a song
 	@POST
-	@Path("{id}")
+	@Path("update/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response updateSongs(String payload, @PathParam("id") int id) {
@@ -106,6 +94,63 @@ public class Services {
 		}
 		return Response.status(200).build();
 	}
+	
 	// Delete a song
+	@DELETE
+	@Path("{id}")
+	public Response deleteSong(@PathParam("id") int id) {
+		DeleteSongCommand command = new DeleteSongCommand();
+		try {
+			command.execute(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Response.status(200).entity("").build();
+	}
+	
 	// Search songs
+	// get song by Id
+		@GET
+		@Path("getid/{id}")
+		@Produces({ MediaType.APPLICATION_JSON })
+		public Response getSongByID(@PathParam("id") int id) {
+			GetSongCommand command = new GetSongCommand();
+			String songString = null;
+			try {
+				songString = mapper.writeValueAsString(command.execute(id));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return Response.status(200).entity(songString).build();
+		}
+		
+		// get song by title
+		@GET
+		@Path("gettitle/{title}")
+		@Produces({ MediaType.APPLICATION_JSON })
+		public Response getSongByTitle(@PathParam("title") String title) {
+			GetSongCommand command = new GetSongCommand();
+			String songString = null;
+			try {
+				songString = mapper.writeValueAsString(command.execute1(title));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return Response.status(200).entity(songString).build();
+		}
+		
+		// get song by artist
+		@GET
+		@Path("getartist/{artist}")
+		@Produces({ MediaType.APPLICATION_JSON })
+		public Response getSongByArtist(@PathParam("artist") String artist) {
+			GetSongCommand command = new GetSongCommand();
+			String songString = null;
+			try {
+				songString = mapper.writeValueAsString(command.execute2(artist));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return Response.status(200).entity(songString).build();
+		}
 }

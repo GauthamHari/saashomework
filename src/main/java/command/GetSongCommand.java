@@ -15,7 +15,6 @@ public class GetSongCommand {
 		Song s = new Song();
 		try {
 			Connection connection = ConnectionProvider.getConnection();
-			// Statement stmt = connection.createStatement();
 			PreparedStatement stmt = connection
 					.prepareStatement("SELECT * FROM Songs WHERE id = ?");
 			stmt.setInt(1, id);
@@ -33,4 +32,45 @@ public class GetSongCommand {
 		return s;
 	}
 
+	public Song execute1(String title) {
+		Song s = new Song();
+		try {
+			Connection connection = ConnectionProvider.getConnection();
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM Songs WHERE title = ?");
+			stmt.setString(1, title);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				s.setArtist(rs.getString("artist"));
+				s.setTitle(rs.getString("title"));
+				s.setId(rs.getInt("id"));
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+	
+	public Song execute2(String artist) {
+		Song s = new Song();
+		try {
+			Connection connection = ConnectionProvider.getConnection();
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM Songs WHERE artist = ?");
+			stmt.setString(1, artist);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				s.setArtist(rs.getString("artist"));
+				s.setTitle(rs.getString("title"));
+				s.setId(rs.getInt("id"));
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
 }
